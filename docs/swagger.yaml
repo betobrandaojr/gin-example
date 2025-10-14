@@ -1,0 +1,23 @@
+swagger: "2.0"
+info:
+  description: "Simple API example with Gin"
+  title: "Gin Gonic Example API"
+  version: "1.0"
+basePath: "/"
+paths:
+  /:
+    get:
+      description: "Get hello world message"
+      produces:
+        - "application/json"
+      tags:
+        - "hello"
+      summary: "Hello World"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "object"
+            properties:
+              message:
+                type: "string"
