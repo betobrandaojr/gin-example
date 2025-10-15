@@ -1,38 +1,25 @@
 package main
 
 import (
-	_ "gin-gonic-example/docs"
-	"gin-gonic-example/src/configuration/util"
-
 	"log"
 
+	_ "gin-gonic-example/docs"
+	"gin-gonic-example/src/configuration/util"
+	"gin-gonic-example/src/controller/routes"
+
 	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title Gin Gonic Example API
-// @version 1.0
-// @description Simple API example with Gin
-// @BasePath /
 func main() {
 	util.LoadEnv()
 
 	r := gin.Default()
+	routes.InitRoutes(&r.RouterGroup)
 
-	// @Summary Hello World
-	// @Description Get hello world message
-	// @Tags hello
-	// @Produce json
-	// @Success 200 {object} map[string]string
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Hello, World!",
-		})
-	})
+	port := ":" + util.Env.PORT
+	log.Printf("Server starting on port %s", port)
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
-	log.Println("Swagger host: http://localhost:" + util.Env.PORT + "/swagger/index.html")
-	r.Run(":" + util.Env.PORT)
+	if err := r.Run(port); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }
